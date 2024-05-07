@@ -18,6 +18,8 @@ const content=sequelize.define('content',{
         type: Sequelize.STRING,
         allowNull:false
     },
+    //type:{type:Sequelize.STRING,allowNull:false}
+
     // sessionId: {
     //     type: Sequelize.INTEGER,
     //     allowNull: false,
