@@ -10,6 +10,8 @@ const user_course=require('./models/user_course');
 
 const courseRoutes=require('./routes/course');
 const sessionRoutes=require('./routes/session');
+const userRoutes=require('./routes/user');
+const authRoutes=require('./routes/auth');
 const contentRoutes=require('./controllers/content')
 
 // express app  
@@ -31,31 +33,36 @@ user.belongsToMany(course, { through: user_course });
 course.belongsToMany(user, { through: user_course });
 
 
-sequelize.sync({}).then(console.log('connected'))
+sequelize.sync().then(console.log('connected'))
 .catch(err=>{console.log(`err:${err}`)})
 
 // mount routes
 app.use('/courses',courseRoutes);
 app.use('/courses',sessionRoutes);
 app.use('/courses',contentRoutes);
-app.all('*',(req,res,next)=>{
-    next(new ApiError(`can not find this route :${req.originalUrl}`,400));
-    
-})
+app.use('/user',userRoutes);
+app.use('/auth',authRoutes);
+app.all('*', (req, res, next) => {
 
-// global error handelling
-app.use((err,req,res,next)=>{
-    err.statusCode=err.statusCode||500
-    err.status=err.status||'error'
+    next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
+  
+  });
+
+
+// Global error handling
+app.use((err, req, res, next) => {
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || 'error';
     res.status(err.statusCode).json({
-        status:err.status,
-        error:err,
-        message:err.message,
-        stack:err.stack,
-
+        status: err.status,
+        error: err,
+        message: err.message,
+        stack: err.stack,
     });
-    next();
-})
+
+
+    //next();
+});
 
 
 //server

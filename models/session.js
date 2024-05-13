@@ -8,7 +8,8 @@ const session=sequelize.define('session',{
         type:Sequelize.INTEGER,
         autoIncrement:true,
         allowNull:false,
-        primaryKey:true
+        primaryKey:true,
+        unique: true
     },
     name:{
         type: Sequelize.STRING,

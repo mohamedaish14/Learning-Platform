@@ -8,7 +8,8 @@ const content=sequelize.define('content',{
         type:Sequelize.INTEGER,
         autoIncrement:true,
         allowNull:false,
-        primaryKey:true
+        primaryKey:true,
+        unique: true
     },
     name:{
         type: Sequelize.STRING,
@@ -18,7 +19,8 @@ const content=sequelize.define('content',{
         type: Sequelize.STRING,
         allowNull:false
     },
-    //type:{type:Sequelize.STRING,allowNull:false}
+    type:{type:Sequelize.STRING,allowNull:false},
+    courseId:{type:Sequelize.INTEGER,allowNull:false},
 
     // sessionId: {
     //     type: Sequelize.INTEGER,

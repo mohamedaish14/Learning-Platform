@@ -8,6 +8,8 @@ const asyncHandeller=require('express-async-handlr');
 const Course=require('../models/course');
 const Session=require('../models/session');
 const Content=require('../models/content');
+const { protect ,authorizedTo} = require("./auth");
+const { where } = require("sequelize");
 
 
 const router=express.Router();
@@ -24,13 +26,19 @@ const storage = getStorage();
 const upload = multer({ storage: multer.memoryStorage() });
 
 //creat content
-router.post("/:courseId/sessions/:sessionId/content", upload.single("filename"), asyncHandeller(async (req, res,next) => {
+router.post("/:courseId/sessions/:sessionId/content",
+//protect , authorizedTo('instructor'),
+upload.single("filename"),
+ asyncHandeller(async (req, res,next) => {
       const {courseId,sessionId}=req.params
       const course=await Course.findByPk(courseId)
       if(!course){
         return next(new ApiError(`No course for this id ${courseId}`, 404));
     }
-    const session=await Session.findByPk(sessionId)
+    const session=await Session.findOne({where:{
+        id:sessionId,
+        courseId:courseId
+    }})
     if(!session){
       return next(new ApiError(`No session for this id ${sessionId}`, 404));
   }
@@ -55,25 +63,32 @@ router.post("/:courseId/sessions/:sessionId/content", upload.single("filename"),
         const content= await Content.create({
             name:req.file.originalname,
             url:downloadURL,
-            sessionId:sessionId
+            sessionId:sessionId,
+           courseId:courseId,
+            type:`${req.file.mimetype}`
         })
         res.status(201).json({data:content})
         ;})
      
 );
 //get all content
-router.get('/:courseId/sessions/:sessionId/content',asyncHandeller(async(req,res,next)=>{
+router.get('/:courseId/sessions/:sessionId/content',
+//protect,
+asyncHandeller(async(req,res,next)=>{
  
     const {courseId,sessionId}=req.params
     const course=await Course.findByPk(courseId)
   if(!course){
     return next(new ApiError(`No course for this id ${courseId}`, 404));
 }
-    const session=await Session.findByPk(sessionId)
+    const session=await Session.findOne({where:{
+        id:sessionId,
+        courseId:courseId
+    }})
   if(!session){
     return next(new ApiError(`No session for this id ${sessionId}`, 404));
 }
-    const content=await Content.findAll({where:{sessionId:sessionId}})
+    const content=await Content.findAll({where:{sessionId:sessionId,courseId:courseId}})
     if(!content){
         return next(new ApiError(`No content for this id ${sessionId}`, 404));
       }
@@ -81,18 +96,25 @@ router.get('/:courseId/sessions/:sessionId/content',asyncHandeller(async(req,res
 }))
 
 //get content
-router.get('/:courseId/sessions/:sessionId/content/:contentId',asyncHandeller(async(req,res,next)=>{
+router.get('/:courseId/sessions/:sessionId/content/:contentId',protect,asyncHandeller(async(req,res,next)=>{
     const {courseId,sessionId,contentId}=req.params
     
     const course=await Course.findByPk(courseId)
     if(!course){
         return next(new ApiError(`No course for this id ${courseId}`, 404));
     }
-    const session=await Session.findByPk(sessionId)
+    const session=await Session.findOne({where:{
+        id:sessionId,
+        courseId:courseId
+    }})
     if(!session){
         return next(new ApiError(`No session for this id ${sessionId}`, 404));
     }
-    const content=await Content.findByPk(contentId)
+    const content=await Content.findOne({where:{
+        id:contentId,
+        courseId:courseId,
+        sessionId:sessionId
+    }})
     if(!content){
         return next(new ApiError(`No content for this id ${contentId}`, 404));
     }
@@ -108,38 +130,56 @@ const updateContent = asyncHandeller(async (req, res,next) => {
     if(!course){
         return next(new ApiError(`No course for this id ${courseId}`, 404));
     }
-    const session=await Session.findByPk(sessionId)
+    const session=await Session.findOne({where:{
+        id:sessionId,
+        courseId:courseId
+    }})
     if(!session){
         return next(new ApiError(`No session for this id ${sessionId}`, 404));
     }
-    const cont=await Content.findByPk(contentId)
+    const cont=await Content.findOne({where:{
+        id:contentId,
+        courseId:courseId,
+        sessionId:sessionId
+    }})
     if(!cont){
         return next(new ApiError(`No content for this id ${contentId}`, 404));
     }
-   const content= await Content.update({name},{ where: {id: contentId } })
+   const content= await Content.update({name},{ where: {id:contentId,
+    courseId:courseId,
+    sessionId:sessionId } })
     res.status(200).json({ data: content});
     })
-    router.put('/:courseId/sessions/:sessionId/content/:contentId', updateContent);
-    router.patch('/courseId/sessions/:sessionId/content/:contentId', updateContent);
+    router.put('/:courseId/sessions/:sessionId/content/:contentId',protect,  authorizedTo('instructor'),updateContent);
+    // router.patch('/courseId/sessions/:sessionId/content/:contentId', updateContent);
    
 
 //delete content
-router.delete('/:courseId/sessions/:sessionId/content/:contentId',asyncHandeller(async (req, res,next) => {
+router.delete('/:courseId/sessions/:sessionId/content/:contentId',protect, authorizedTo('instructor'),asyncHandeller(async (req, res,next) => {
     const { courseId,sessionId,contentId } = req.params;
     
     const course=await Course.findByPk(courseId)
     if(!course){
         return next(new ApiError(`No course for this id ${courseId}`, 404));
     }
-    const session=await Session.findByPk(sessionId)
+    const session=await Session.findOne({where:{
+        id:sessionId,
+        courseId:courseId
+    }})
     if(!session){
         return next(new ApiError(`No session for this id ${sessionId}`, 404));}
 
-    const content=await Content.findByPk(contentId)
+    const content=await ContentfindOne({where:{
+        id:contentId,
+        courseId:courseId,
+        sessionId:sessionId
+    }})
     if(!content){
         return next(new ApiError(`No content for this id ${contentId}`, 404));
     }
-    await Content.destroy({ where: {id: contentId } })
+    await Content.destroy({ where: { id:contentId,
+        courseId:courseId,
+        sessionId:sessionId } })
     res.status(204).json({mss:'deleted'});
     }));
 

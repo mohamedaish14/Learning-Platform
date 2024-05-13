@@ -28,6 +28,7 @@ exports.getCourse=asyncHandeller(async(req,res,next)=>{
 })
 
 exports.updateCourse = asyncHandeller(async (req, res,next) => {
+   console.log( 'Reached controller function')
     const { courseId } = req.params;
     const  {name,description} = req.body;
    
@@ -36,7 +37,8 @@ exports.updateCourse = asyncHandeller(async (req, res,next) => {
         return next(new ApiError(`No course for this id ${courseId}`, 404));
     }
     await Course.update({name,description},{ where: {id: courseId } })
-    res.status(200).json({ data: await Course.findByPk(courseId)});
+    const new_u=await Course.findByPk(courseId);
+    res.status(200).json({ data: new_u});
     })
 
 exports.deleteCourse = asyncHandeller(async (req, res) => {

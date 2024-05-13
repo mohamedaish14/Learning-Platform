@@ -9,6 +9,7 @@ const course=sequelize.define('course',{
         autoIncrement:true,
         allowNull:false,
         primaryKey:true
+        , unique: true
     },
     name:{
         type: Sequelize.STRING,

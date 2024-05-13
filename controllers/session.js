@@ -20,7 +20,8 @@ exports.creatSession=asyncHandeller(async(req,res,next)=>{
     duration:duration,
     courseId:courseId})
 
-    res.status(201).json({data:session});})
+    res.status(201).json({data:session})
+    ;})
 
 exports.getAllSessions=asyncHandeller(async(req,res,next)=>{
  

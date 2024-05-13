@@ -7,14 +7,14 @@ const {
     ,updateCourse
     ,deleteCourse
 }=require('../controllers/course');
-
+const {protect,authorizedTo}=require('../controllers/auth')
 const router=express.Router();
 
-router.post('/',creatCourse)
+router.post('/',protect,authorizedTo('instructor'),creatCourse)
 .get('/',getAllCourses).get('/:courseId',getCourse);
-router.put('/:courseId', updateCourse);
-router.patch('/:courseId', updateCourse);
-router.delete('/:courseId', deleteCourse);
+router.put('/:courseId',protect,authorizedTo('instructor'),updateCourse);
+router.patch('/:courseId',protect, authorizedTo('instructor'),updateCourse);
+router.delete('/:courseId',protect, authorizedTo('instructor'),deleteCourse);
 
 
 module.exports=router
