@@ -20,6 +20,7 @@ const contentRoutes=require('./controllers/content')
 const app=express();
 
 //midellware
+
 app.use(express.json());
 
 
