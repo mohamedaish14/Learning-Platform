@@ -19,7 +19,11 @@ const content=sequelize.define('content',{
         type: Sequelize.STRING,
         allowNull:false
     },
-    type:{type:Sequelize.STRING,allowNull:false},
+    type:{
+        type:Sequelize.STRING,
+        allowNull:false
+    },
+
     courseId:{type:Sequelize.INTEGER,allowNull:false},
 
     // sessionId: {

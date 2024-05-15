@@ -31,10 +31,10 @@ router.post("/:courseId/sessions/:sessionId/content",
 upload.single("filename"),
  asyncHandeller(async (req, res,next) => {
       const {courseId,sessionId}=req.params
-      const course=await Course.findByPk(courseId)
-      if(!course){
-        return next(new ApiError(`No course for this id ${courseId}`, 404));
-    }
+    //   const course=await Course.findByPk(courseId)
+    //   if(!course){
+    //     return next(new ApiError(`No course for this id ${courseId}`, 404));
+    // }
     const session=await Session.findOne({where:{
         id:sessionId,
         courseId:courseId
@@ -50,7 +50,7 @@ upload.single("filename"),
         const metadata = {
             contentType: req.file.mimetype,
         };
-
+console.log(req.file.mimetype);
         // Upload the file in the bucket storage
         const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
         //by using uploadBytesResumable we can control the progress of uploading like pause, resume, cancel

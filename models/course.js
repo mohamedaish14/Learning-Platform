@@ -19,6 +19,10 @@ const course=sequelize.define('course',{
         type: Sequelize.STRING,
         allowNull:false
     },
+    instructorId:{
+        type: Sequelize.INTEGER,
+        allowNull:false
+    },
 },{timestamps: true});
 
 

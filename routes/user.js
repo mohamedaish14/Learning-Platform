@@ -1,7 +1,7 @@
 const express=require('express');
 
 const {
-  creatstudent
+  useCourseEnrollment
     ,getAllUsers
     ,getUser
     ,updateUser
@@ -15,20 +15,23 @@ const {
     updateUserValidator,
     
     changeUserPasswordValidator,
-    updateLoggedUserValidator,
+  
   } = require('../utils/validators/user');
 const { protect ,authorizedTo} = require('../controllers/auth');
 
 const router=express.Router();
 
-router.post('/',createUserValidator,authorizedTo('instructor'),creatstudent)
-router.get('/',protect,getAllUsers)
-router.get('/profile',protect,getUserData,getUser);
-// router.get('/:userId',protect,getUser);
-router.put('/:userId',protect,updateUserValidator,updateUser);
-router.put('/:userId/changepassword',protect,changeUserPasswordValidator,changePassword);
+router.post('/'
+,protect,authorizedTo('instructor')
+//,createUserValidator
+,useCourseEnrollment)
+router.get('/',protect,authorizedTo('instructor'),getAllUsers)
+router.get('/profile',protect,getUser);
+//router.get('/:userId',protect,authorizedTo('instructor'),getUser);
+router.put('/updateUserData',protect,updateUserValidator,updateUser);
+router.put('/changeUserPassword',protect,changeUserPasswordValidator,changePassword);
 
-router.delete('/:userId',protect,deleteUser);
+router.delete('/deactiveUser',protect,deleteUser);
 
 
 module.exports=router

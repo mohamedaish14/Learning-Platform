@@ -15,8 +15,7 @@ router.post('/:courseId/sessions',protect, authorizedTo('instructor'),creatSessi
 router.get('/:courseId/sessions',protect,getAllSessions)
 router.get('/courseId/sessions/:sessionId',protect,getSession);
 router.put('/:courseId/sessions/:sessionId',protect , authorizedTo('instructor'),updateSession);
-router.patch('/:courseId/sessions/:sessionId', protect, authorizedTo('instructor'),updateSession);
-router.delete('/courseId/sessions/:sessionId', protect, authorizedTo('instructor'),deleteSession);
+router.delete('/:courseId/sessions/:sessionId', protect, authorizedTo('instructor'),deleteSession);
 
 
 module.exports=router

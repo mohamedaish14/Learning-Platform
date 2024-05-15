@@ -4,12 +4,10 @@ const sequelize=require('../utils/database');
 
 const user_course = sequelize.define('user_course', {
   
-    // userId: {
-    //   type: Sequelize.INTEGER,
+    // userEmail: {
+    //   type: Sequelize.STRING,
     //   allowNull: false,
-    //   references: {
-    //     model: 'user', 
-    //     key: 'id'
+    //
     //   }
     // },
     // courseId: {

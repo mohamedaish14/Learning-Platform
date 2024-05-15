@@ -2,6 +2,8 @@ const express=require('express');
 const sequelize=require('./utils/database');
 
 const ApiError=require('./utils/apiError');
+const globalError=require('./middleware/errorMiddleware');
+
 const user=require('./models/user');
 const content=require('./models/content');
 const session=require('./models/session');
@@ -37,6 +39,7 @@ sequelize.sync().then(console.log('connected'))
 .catch(err=>{console.log(`err:${err}`)})
 
 // mount routes
+
 app.use('/courses',courseRoutes);
 app.use('/courses',sessionRoutes);
 app.use('/courses',contentRoutes);
@@ -50,19 +53,7 @@ app.all('*', (req, res, next) => {
 
 
 // Global error handling
-app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || 'error';
-    res.status(err.statusCode).json({
-        status: err.status,
-        error: err,
-        message: err.message,
-        stack: err.stack,
-    });
-
-
-    //next();
-});
+app.use(globalError);
 
 
 //server

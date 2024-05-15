@@ -23,10 +23,7 @@ const user=sequelize.define('user',{
         type:Sequelize.STRING,
         allowNull:false
     },
-    passwordConfirm:{
-        type:Sequelize.STRING,
-        allowNull:false
-    },
+   
     role:{
         type: Sequelize.ENUM('student', 'instructor'),
         defaultValue: 'instructor'
@@ -34,15 +31,18 @@ const user=sequelize.define('user',{
 },{timestamps: true});
 
 user.beforeCreate(async (user) => {
-    if (user.changed('password')) {
+     
       user.password = await bcrypt.hash(user.password, 12);
       user.passwordConfirm=user.password;
+})
+  ;
+user.beforeUpdate(async (user) => {
+    if (user.changed('password')) {
+        console.log("hashing")
+      user.password = await bcrypt.hash(user.password, 12);
+      console.log('hashed')
+      user.passwordConfirm = user.password; 
     }
-  });
-// user.beforeUpdate(async (user) => {
-//     if (user.password) {
-//       user.password = await bcrypt.hash(user.password, 12);
-//       user.passwordConfirm=user.password;
-//     }
-//   });
+  })
+
 module.exports=user;
