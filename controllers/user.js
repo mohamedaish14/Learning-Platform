@@ -62,10 +62,25 @@ exports.useCourseEnrollment = asyncHandeller(async (req, res, next) => {
 });
 
 exports.getAllUsers = asyncHandeller(async (req, res) => {
-  const users = await User.findAll();
-  res.status(200).json({
-    data: users,
+  const token = req.headers.cookie.split("=")[1];
+  let instructorId;
+  jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
+    instructorId = decodedToken.data.id;
   });
+  
+  const users = await User.findAll({
+    include: [{
+      model: Course,
+      where: { instructorId },
+      attributes: [], 
+      through: { attributes: [] } 
+    }]
+  });
+  // const users = await User.findAll();
+   res.status(200).json({
+   data: users,
+  });
+
 });
 
 exports.getUser = asyncHandeller(async (req, res, next) => {
