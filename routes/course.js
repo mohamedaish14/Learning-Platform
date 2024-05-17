@@ -17,7 +17,7 @@ router.post(
 authorizedTo('instructor'),
   creatCourse
 );
-router.get("/", getAllCourses);
+router.get("/",protect ,getAllCourses);
 router.get("/:courseId", getCourse);
 router.put("/:courseId", protect, authorizedTo("instructor"), updateCourse);
 router.patch("/:courseId", protect, authorizedTo("instructor"), updateCourse);
