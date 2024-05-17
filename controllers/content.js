@@ -27,10 +27,11 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 //creat content
 router.post("/:courseId/sessions/:sessionId/content",
-//protect , authorizedTo('instructor'),
+protect , authorizedTo('instructor'),
 upload.single("filename"),
  asyncHandeller(async (req, res,next) => {
       const {courseId,sessionId}=req.params
+      const name=req.body.name;
     //   const course=await Course.findByPk(courseId)
     //   if(!course){
     //     return next(new ApiError(`No course for this id ${courseId}`, 404));
@@ -61,7 +62,7 @@ console.log(req.file.mimetype);
         console.log('File successfully uploaded.');
        
         const content= await Content.create({
-            name:req.file.originalname,
+            name:name,
             url:downloadURL,
             sessionId:sessionId,
            courseId:courseId,
@@ -169,7 +170,7 @@ router.delete('/:courseId/sessions/:sessionId/content/:contentId',protect, autho
     if(!session){
         return next(new ApiError(`No session for this id ${sessionId}`, 404));}
 
-    const content=await ContentfindOne({where:{
+    const content=await Content.findOne({where:{
         id:contentId,
         courseId:courseId,
         sessionId:sessionId
