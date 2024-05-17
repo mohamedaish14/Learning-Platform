@@ -44,8 +44,8 @@ exports.getAllCourses = asyncHandler(async (req, res) => {
         where: { id: Id},
         include: [{
             model: Course,
-            attributes: ['id', 'description', 'createdAt', 'updatedAt'],
-            through: { attributes: [] } // to exclude the join table attributes
+            attributes: ['id','name','description', 'createdAt', 'updatedAt'],
+            through: { attributes: [] } 
         }]
     });
 
