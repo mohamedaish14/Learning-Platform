@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Course = require("../models/course");
 const user_course = require("../models/user_course");
 
 const ApiError = require("../utils/apiError");
