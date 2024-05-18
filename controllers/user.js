@@ -62,7 +62,7 @@ exports.useCourseEnrollment = asyncHandeller(async (req, res, next) => {
 });
 
 exports.getAllUsers = asyncHandeller(async (req, res) => {
-  const token = req.headers.cookie.split("=")[1];
+  const token = req.headers.authorization.split(" ")[1];
   let instructorId;
   jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
     instructorId = decodedToken.data.id;
@@ -85,7 +85,7 @@ exports.getAllUsers = asyncHandeller(async (req, res) => {
 
 exports.getUser = asyncHandeller(async (req, res, next) => {
   let cId;
-  const token = req.headers.cookie.split("=")[1];
+  const token = req.headers.authorization.split(" ")[1];
   jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
     cId = decodedToken.data.id;
   });
@@ -98,7 +98,7 @@ exports.getUser = asyncHandeller(async (req, res, next) => {
 
 exports.updateUser = asyncHandeller(async (req, res, next) => {
     let cId;
-    const token = req.headers.cookie.split("=")[1];
+    const token = req.headers.authorization.split(" ")[1];
     jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
       cId = decodedToken.data.id;
     });
@@ -131,7 +131,7 @@ exports.changePassword = asyncHandeller(async (req, res, next) => {
 
 exports.deleteUser = asyncHandeller(async (req, res) => {
     let cId;
-    const token = req.headers.cookie.split("=")[1];
+    const token = req.headers.authorization.split(" ")[1];
     jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
       cId = decodedToken.data.id;
     });
