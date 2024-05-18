@@ -13,7 +13,7 @@ const { where } = require("sequelize");
 exports.creatCourse = asyncHandler(async (req, res, next) => {
   const name = req.body.name;
   const description = req.body.description;
-  const token = req.headers.cookie.split("=")[1];
+  const token = req.headers.authorization.split(" ")[1];
 
   let cId;
   jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
@@ -29,7 +29,7 @@ exports.creatCourse = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAllCourses = asyncHandler(async (req, res) => {
-  const token = req.headers.cookie.split("=")[1];
+  const token = req.headers.authorization.split(" ")[1];
   let Id;
   jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
     Id = decodedToken.data.id;
@@ -66,7 +66,7 @@ exports.getAllCourses = asyncHandler(async (req, res) => {
 });
 
 exports.getCourse = asyncHandler(async (req, res, next) => {
-  const token = req.headers.cookie.split("=")[1];
+  const token = req.headers.authorization.split(" ")[1];
   let cId;
   jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
     cId = decodedToken.data.id;
@@ -98,7 +98,7 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateCourse = asyncHandler(async (req, res, next) => {
-  const token = req.headers.cookie.split("=")[1];
+  const token = req.headers.authorization.split(" ")[1];
   let cId;
   jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
     cId = decodedToken.data.id;
@@ -118,7 +118,7 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteCourse = asyncHandler(async (req, res) => {
-  const token = req.headers.cookie.split("=")[1];
+  const token = req.headers.authorization.split(" ")[1];
   let cId;
   jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
     cId = decodedToken.data.id;
