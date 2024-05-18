@@ -76,7 +76,7 @@ exports.login = async (req, res, next) => {
       });
       return res.status(200).json({user,token,message: "Login successful" });
     } 
-    
+
     else {
       return res
         .status(400)
@@ -90,7 +90,7 @@ exports.login = async (req, res, next) => {
 
 ////////////protect/////////////////
 exports.protect=(req, res, next) =>{
-  const token = req.headers.cookie.split('=')[1];
+  const token = req.headers.authorization.split(' ')[1];
   
   if (!token) {
       return res.status(401).json({ message: 'Authorization header missing' });

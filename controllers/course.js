@@ -13,8 +13,7 @@ const { where } = require("sequelize");
 exports.creatCourse = asyncHandler(async (req, res, next) => {
   const name = req.body.name;
   const description = req.body.description;
-  const token = req.headers.authorization.split(" ")[1];
-
+console.log(token);
   let cId;
   jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
     cId = decodedToken.data.id;
