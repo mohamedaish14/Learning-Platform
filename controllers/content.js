@@ -45,7 +45,10 @@ upload.single("filename"),
   }
       const dateTime = giveCurrentDateTime();
 
-        const storageRef = ref(storage, `files/${req.file.originalname + "       " + dateTime}`);
+      const safeOriginalName = encodeURIComponent(req.file.originalname);
+      console.log(req.file.originalname);
+      const safeDateTime = encodeURIComponent(dateTime);
+      const storageRef = ref(storage, `files/${safeOriginalName} ${safeDateTime}`)
 
         // Create file metadata including the content type
         const metadata = {
@@ -59,7 +62,6 @@ console.log(req.file.mimetype);
         // Grab the public url
         const downloadURL = await getDownloadURL(snapshot.ref);
 
-        console.log('File successfully uploaded.');
        
         const content= await Content.create({
             name:name,
