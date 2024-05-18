@@ -45,8 +45,8 @@ upload.single("filename"),
   }
       const dateTime = giveCurrentDateTime();
 
-      const safeOriginalName = encodeURIComponent(req.file.originalname);
-      console.log(req.file.originalname);
+      const safeOriginalName = encodeURIComponent(name);
+      console.log(safeOriginalName);
       const safeDateTime = encodeURIComponent(dateTime);
       const storageRef = ref(storage, `files/${safeOriginalName} ${safeDateTime}`)
 
@@ -54,7 +54,6 @@ upload.single("filename"),
         const metadata = {
             contentType: req.file.mimetype,
         };
-console.log(req.file.mimetype);
         // Upload the file in the bucket storage
         const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
         //by using uploadBytesResumable we can control the progress of uploading like pause, resume, cancel
