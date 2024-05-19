@@ -30,12 +30,23 @@ router.post("/:courseId/sessions/:sessionId/content",
 protect , authorizedTo('instructor'),
 upload.single("filename"),
  asyncHandeller(async (req, res,next) => {
-      const {courseId,sessionId}=req.params
+    const {courseId,sessionId}=req.params
       const name=req.body.name;
-    //   const course=await Course.findByPk(courseId)
-    //   if(!course){
-    //     return next(new ApiError(`No course for this id ${courseId}`, 404));
-    // }
+
+    let cId;
+    const token = req.headers.authorization.split(" ")[1];
+    jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
+      cId = decodedToken.data.id;
+    });
+
+    const course=await Course.findOne({where:{
+        instructorId:cId
+    }})
+      
+    if(!course){
+     return next(new ApiError(`No access fto add new content in this course`, 404));
+
+    }
     const session=await Session.findOne({where:{
         id:sessionId,
         courseId:courseId
@@ -75,7 +86,7 @@ upload.single("filename"),
 );
 //get all content
 router.get('/:courseId/sessions/:sessionId/content',
-//protect,
+protect,
 asyncHandeller(async(req,res,next)=>{
  
     const {courseId,sessionId}=req.params
@@ -94,7 +105,7 @@ asyncHandeller(async(req,res,next)=>{
     if(!content){
         return next(new ApiError(`No content for this id ${sessionId}`, 404));
       }
-    res.status(200).json({data:content});
+    res.status(200).json({data:content,results:content.length});
 }))
 
 //get content
