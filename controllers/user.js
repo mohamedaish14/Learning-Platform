@@ -33,7 +33,7 @@ exports.useCourseEnrollment = asyncHandeller(async (req, res, next) => {
       password: "StundentPass123#",
       role: "student",
     });
-    text = `welcome in our platform,you are invited to new course https://learning-platform-9wrh.onrender.com/courses/${addedCourseId}},your password is:StundentPass123# `;
+    text = `welcome in our platform,you are invited to new course https://learning-platform-9wrh.onrender.com/courses/${addedCourseId},your password is:StundentPass123# `;
   } else {
     (`you are invited to new course,go check it:https://learning-platform-9wrh.onrender.com/courses/${addedCourseId}}`);
   }
