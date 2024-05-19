@@ -54,6 +54,7 @@ exports.getAllCourses = asyncHandler(async (req, res) => {
 
         const courses = userWithCourses.courses.map(course => ({
             id: course.id,
+            name:course.name,
             description: course.description,
             createdAt: course.createdAt,
             updatedAt: course.updatedAt
@@ -113,8 +114,8 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
   }
   const { name, description } = req.body;
   await Course.update({ name, description }, { where: { id: courseId } });
-  const new_u = await Course.findByPk(courseId);
-  res.status(200).json({ data: new_u });
+  const newCourse = await Course.findByPk(courseId);
+  res.status(200).json({ data: newCourse });
 });
 
 exports.deleteCourse = asyncHandler(async (req, res) => {
