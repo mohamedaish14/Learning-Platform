@@ -78,6 +78,7 @@ exports.getAllUsers = asyncHandeller(async (req, res) => {
   // const users = await User.findAll();
    res.status(200).json({
    data: users,
+   results:users.length
   });
 
 });

@@ -58,7 +58,7 @@ exports.getAllCourses = asyncHandler(async (req, res) => {
             createdAt: course.createdAt,
             updatedAt: course.updatedAt
         }));
-        res.status(200).json({ data: courses })
+        res.status(200).json({ data: courses,results:courses.length })
 
     }
     

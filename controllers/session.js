@@ -36,7 +36,7 @@ exports.getAllSessions=asyncHandeller(async(req,res,next)=>{
       }
     res.status(200).json({
        
-        data:sessions});
+        data:sessions,results:sessions.length});
 })
 
 exports.getSession=asyncHandeller(async(req,res,next)=>{
