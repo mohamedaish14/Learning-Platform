@@ -55,6 +55,14 @@ router.post(
     if (course.instructorId != cId) {
       return next(new ApiError(`No access to dd content in this course`, 404));
     }
+
+    const session = await Session.findOne({
+        where: {
+          id: sessionId,
+          courseId: courseId,
+        },
+      });
+      
     if (!session) {
       return next(new ApiError(`No session for this id ${sessionId}`, 404));
     }
