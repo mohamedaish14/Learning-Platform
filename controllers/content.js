@@ -10,6 +10,7 @@ const Session=require('../models/session');
 const Content=require('../models/content');
 const { protect ,authorizedTo} = require("./auth");
 const { where } = require("sequelize");
+const jwt = require('jsonwebtoken');
 
 
 const router=express.Router();
@@ -33,24 +34,22 @@ upload.single("filename"),
     const {courseId,sessionId}=req.params
       const name=req.body.name;
 
-    let cId;
-    const token = req.headers.authorization.split(" ")[1];
-    jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
-      cId = decodedToken.data.id;
-    });
+      let cId;
+      const token = req.headers.authorization.split(" ")[1];
+      jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
+        cId = decodedToken.data.id;
+      });
 
-    const course=await Course.findOne({where:{
-        instructorId:cId
-    }})
-      
-    if(!course){
-     return next(new ApiError(`No access fto add new content in this course`, 404));
+      const course=await Course.findOne({where:{
+        id:courseId
+       }})
 
-    }
-    const session=await Session.findOne({where:{
-        id:sessionId,
-        courseId:courseId
-    }})
+        console.log(`${cId}     :  ${course.instructorId}`)
+        
+      if(course.instructorId!=cId){
+       return next(new ApiError(`No access to dd content in this course`, 404));
+  
+      }
     if(!session){
       return next(new ApiError(`No session for this id ${sessionId}`, 404));
   }
@@ -139,14 +138,24 @@ const updateContent = asyncHandeller(async (req, res,next) => {
     const { courseId,sessionId,contentId } = req.params;
     const  {name} = req.body;
    
-    const course=await Course.findByPk(courseId)
-    if(!course){
-        return next(new ApiError(`No course for this id ${courseId}`, 404));
+    let cId;
+    const token = req.headers.authorization.split(" ")[1];
+    jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
+      cId = decodedToken.data.id;
+    });
+    const course=await Course.findOne({where:{
+        id:courseId
+       }})
+      
+    if(course.instructorId!=cId){
+     return next(new ApiError(`No access to update content in this course`, 404));
     }
+
     const session=await Session.findOne({where:{
         id:sessionId,
         courseId:courseId
     }})
+
     if(!session){
         return next(new ApiError(`No session for this id ${sessionId}`, 404));
     }
@@ -171,9 +180,20 @@ const updateContent = asyncHandeller(async (req, res,next) => {
 router.delete('/:courseId/sessions/:sessionId/content/:contentId',protect, authorizedTo('instructor'),asyncHandeller(async (req, res,next) => {
     const { courseId,sessionId,contentId } = req.params;
     
-    const course=await Course.findByPk(courseId)
-    if(!course){
-        return next(new ApiError(`No course for this id ${courseId}`, 404));
+    let cId;
+    const token = req.headers.authorization.split(" ")[1];
+    jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
+      cId = decodedToken.data.id;
+    });
+
+    const course=await Course.findOne({where:{
+     id:courseId
+    }})
+  
+      
+    if(course.instructorId!=cId){
+     return next(new ApiError(`No access to delete content from this course`, 404));
+
     }
     const session=await Session.findOne({where:{
         id:sessionId,
