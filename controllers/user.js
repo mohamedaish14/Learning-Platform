@@ -7,7 +7,6 @@ const asyncHandeller = require("express-async-handlr");
 
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
-const course = require("../models/course");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
