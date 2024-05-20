@@ -1,4 +1,5 @@
 const express=require('express');
+const cors=require('cors')
 const sequelize=require('./utils/database');
 
 const ApiError=require('./utils/apiError');
@@ -18,7 +19,8 @@ const contentRoutes=require('./controllers/content')
 
 // express app  
 const app=express();
-
+app.use(cors());
+app.options('*',cors())
 //midellware
 app.use(express.json());
 app.use((req, res, next) => {
