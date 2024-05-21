@@ -123,7 +123,7 @@ exports.changePassword = asyncHandeller(async (req, res, next) => {
       return next(new ApiError(`invalid token try to log in again`, 404));
     }
  
- user.passwordConfirm=req.body.passwordConfirm;
+
   user.password = req.body.password;
   await user.save();
   res.status(200).json({ data: user,message:'password updated ' });
