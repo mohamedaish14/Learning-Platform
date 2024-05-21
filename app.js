@@ -19,7 +19,7 @@ const contentRoutes=require('./controllers/content')
 
 // express app  
 const app=express();
-const allowedOrigins = ['https://storky-lite.vercel.app', 'http://localhost:3000'];
+const allowedOrigins = ['https://storky-lite.vercel.app', 'http://localhost:3000','https://learning-platform-9wrh.onrender.com'];
 
 // Configure CORS options
 const corsOptions = {
@@ -37,12 +37,12 @@ const corsOptions = {
 // Use CORS middleware with
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', `http://localhost:${process.env.PORT || 3000}`);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-  });
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', `http://localhost:${process.env.PORT || 3000}`);
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     next();
+//   });
 
 
 
