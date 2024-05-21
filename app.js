@@ -19,13 +19,18 @@ const contentRoutes=require('./controllers/content')
 
 // express app  
 const app=express();
-const allowedOrigin = 'https://storky-lite.vercel.app/';
+const allowedOrigins = ['https://storky-lite.vercel.app', `http://localhost:${process.env.PORT || 3000}`];
 
 // Configure CORS options
-const corsOptions = {
-    origin: allowedOrigin,
-    optionsSuccessStatus: 200 
-};
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
 
 //midellware
@@ -33,7 +38,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', `http://localhost:${process.env.PORT || 3000}`);
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
