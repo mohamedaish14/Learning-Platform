@@ -19,19 +19,19 @@ const contentRoutes=require('./controllers/content')
 
 // express app  
 const app=express();
-const allowedOrigins = ['https://storky-lite.vercel.app', `http://localhost:${process.env.PORT || 3000}`];
+const allowedOrigins = ['https://storky-lite.vercel.app', 'http://localhost:3000'];
 
 // Configure CORS options
-var corsOptions = {
+const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true)
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(new Error('Not allowed by CORS'));
     }
   }
-}
-
+};
 
 //midellware
 // Use CORS middleware with
@@ -79,7 +79,7 @@ app.use(globalError);
 
 
 //server
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT
 const server=app.listen(PORT)
 
 //error outside express
