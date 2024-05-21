@@ -113,7 +113,7 @@ exports.updateUser = asyncHandeller(async (req, res, next) => {
 
 exports.changePassword = asyncHandeller(async (req, res, next) => {
     let cId;
-    const token = req.headers.token.split(" ")[1];
+    const token = req.headers.authorization.split(" ")[1];
     jwt.verify(token, process.env.jwt_secret, async (err, decodedToken) => {
       cId = decodedToken.data.id;
     });
