@@ -19,9 +19,18 @@ const contentRoutes=require('./controllers/content')
 
 // express app  
 const app=express();
-app.use(cors());
-app.options('*',cors())
+const allowedOrigin = 'https://storky-lite.vercel.app/';
+
+// Configure CORS options
+const corsOptions = {
+    origin: allowedOrigin,
+    optionsSuccessStatus: 200 
+};
+
+
 //midellware
+// Use CORS middleware with
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
